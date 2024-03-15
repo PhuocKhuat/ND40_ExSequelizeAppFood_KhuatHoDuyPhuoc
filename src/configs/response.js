@@ -1,7 +1,7 @@
-const responseData = (res, message, status, content)=>{
+const responseData = (res, status,message,  content)=>{
   res.json({
-    message,
     status,
+    message,
     data : content,
     date: new Date(),
 });
