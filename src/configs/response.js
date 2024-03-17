@@ -2,7 +2,7 @@ const responseData = (res, status,message,  content)=>{
   res.status(status).json({
     status,
     message,
-    data : content,
+    content,
     date: new Date(),
 });
 };

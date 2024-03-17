@@ -3,6 +3,6 @@ import { getRateListByRes, getRateListByUser } from '../controllers/rateControll
 
 const rateRouter = express.Router();
 rateRouter.get("/get-rate-list-by-res/:resId", getRateListByRes);
-rateRouter.get("/get-rate-list-by-res/:userId", getRateListByUser);
+rateRouter.get("/get-rate-list-by-user/:userId", getRateListByUser);
 
 export default rateRouter;
