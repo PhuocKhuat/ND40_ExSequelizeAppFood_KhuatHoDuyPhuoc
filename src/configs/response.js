@@ -1,5 +1,5 @@
 const responseData = (res, status,message,  content)=>{
-  res.json({
+  res.status(status).json({
     status,
     message,
     data : content,
