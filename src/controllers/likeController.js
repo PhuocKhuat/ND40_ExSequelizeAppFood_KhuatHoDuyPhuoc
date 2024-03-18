@@ -30,7 +30,6 @@ const likeUnlike = async (req, res) => {
     return responseData(res, 200, "Processed successfully");
   } catch (error) {
     return responseData(res, 500, "Error processing request");
-    
   }
 };
 
