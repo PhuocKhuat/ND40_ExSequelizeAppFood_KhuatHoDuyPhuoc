@@ -23,12 +23,30 @@ export default class like_res extends Model {
     date_like: {
       type: DataTypes.DATE,
       allowNull: true
+    },
+    isLike: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true
+    },
+    like_res_id: {
+      autoIncrement: true,
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      primaryKey: true
     }
   }, {
     sequelize,
     tableName: 'like_res',
     timestamps: false,
     indexes: [
+      {
+        name: "PRIMARY",
+        unique: true,
+        using: "BTREE",
+        fields: [
+          { name: "like_res_id" },
+        ]
+      },
       {
         name: "user_id",
         using: "BTREE",

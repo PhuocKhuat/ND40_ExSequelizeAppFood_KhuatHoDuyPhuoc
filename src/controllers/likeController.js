@@ -3,38 +3,35 @@ import sequelizeConnect from "../models/connect.js";
 import initModels from "../models/init-models.js";
 
 const initModel = initModels(sequelizeConnect);
-const getLikeList = async (req, res) => {
-  const content = await initModel.users.findAll({
-    include: [
-      {
-        attributes: [],
-        model: initModel.like_res,
-        as: "like_res",
-        required: true,
+const likeUnlike = async (req, res) => {
+  try {
+    const { user_id, res_id } = req.body;
+    const existingLike = await initModel.like_res.findOne({
+      where: {
+        user_id: user_id,
+        res_id: res_id,
       },
-    ],
-    group: ["users.user_id"],
-  });
-
-  responseData(res, 200, "Processed successfully", { content });
-};
-
-const getDisLikeList = async (req, res) => {
-  const content = await initModel.users.findAll({
-    include: [
-      {
-        attributes: [],
-        model: initModel.like_res,
-        as: "like_res",
-        required: false,
-      },
-    ],
-    where: {
-      "$like_res.user_id$": null,
-    },
-  });
-
-  responseData(res, 200, "Processed successfully", { content });
+    });
+    if (existingLike) {
+      if (existingLike.isLike == 1) {
+        await existingLike.update({ date_like: new Date(), isLike: 0 });
+      } else{
+        await existingLike.update({ date_like: new Date(), isLike: 1 });
+        // await existingLike.destroy();
+      }
+    } else {
+      await initModel.like_res.create({
+        user_id: user_id,
+        res_id: res_id,
+        date_like: new Date(),
+        isLike: 1,
+      });
+    }
+    return responseData(res, 200, "Processed successfully");
+  } catch (error) {
+    return responseData(res, 500, "Error processing request");
+    
+  }
 };
 
 const getLikeListByRes = async (req, res) => {
@@ -62,7 +59,7 @@ const getLikeListByRes = async (req, res) => {
 };
 
 const getLikeListByUser = async (req, res) => {
-  const {userId} = req.params;
+  const { userId } = req.params;
   const content = await initModel.like_res.findAll({
     attributes: ["user_id", "res_id", "date_like"],
     include: [
@@ -75,10 +72,10 @@ const getLikeListByUser = async (req, res) => {
         model: initModel.restaurants,
         as: "re",
         attributes: ["res_name", "image", "description"],
-      }
+      },
     ],
     where: {
-      user_id : userId
+      user_id: userId,
     },
     raw: true,
   });
@@ -86,4 +83,4 @@ const getLikeListByUser = async (req, res) => {
   responseData(res, 200, "Processed successfully", { content });
 };
 
-export { getLikeList, getDisLikeList, getLikeListByRes, getLikeListByUser };
+export { likeUnlike, getLikeListByRes, getLikeListByUser };
