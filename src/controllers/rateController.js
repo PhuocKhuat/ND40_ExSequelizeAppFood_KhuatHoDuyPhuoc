@@ -17,7 +17,7 @@ try {
   if (!existingRateRes) {
     return responseData(res, 400, "Invalid restaurant code");
   }
-  const rates = await initModel.rate_res.findAll({
+  const rateList = await initModel.rate_res.findAll({
     attributes: ["res_id", "user_id", "amount", "date_rate"],
     include: ["re", "user"],
     where: {
@@ -26,7 +26,7 @@ try {
     raw: true,
   });
 
-  const formattedRates = rates.map((rate) => ({
+  const formattedRates = rateList.map((rate) => ({
     resId: rate.res_id,
     amount: rate.amount,
     dateRate: rate.date_rate,
@@ -62,7 +62,7 @@ const getRateListByUser = async (req, res) => {
     if (!existingRateRes) {
       return responseData(res, 400, "Invalid user code");
     }
-    const rates = await initModel.rate_res.findAll({
+    const rateList = await initModel.rate_res.findAll({
       attributes: ["user_id", "res_id", "amount", "date_rate"],
       where: {
         user_id: userId,
@@ -70,7 +70,7 @@ const getRateListByUser = async (req, res) => {
       include: ["re", "user"],
       raw: true,
     });
-    const formattedRates = rates.map((rate) => ({
+    const formattedRates = rateList.map((rate) => ({
       userId: rate.user_id,
       amount: rate.amount,
       dateRate: rate.date_rate,
