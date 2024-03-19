@@ -24,7 +24,7 @@ export default class like_res extends Model {
       type: DataTypes.DATE,
       allowNull: true
     },
-    isLike: {
+    is_like: {
       type: DataTypes.BOOLEAN,
       allowNull: true
     },

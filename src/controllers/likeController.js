@@ -26,10 +26,10 @@ const likeUnlike = async (req, res) => {
         ],
       });
       if (existingLike) {
-        if (existingLike.isLike == 1) {
-          await existingLike.update({ date_like: new Date(), isLike: 0 });
+        if (existingLike.is_like == 1) {
+          await existingLike.update({ date_like: new Date(), is_like: 0 });
         } else {
-          await existingLike.update({ date_like: new Date(), isLike: 1 });
+          await existingLike.update({ date_like: new Date(), is_like: 1 });
           // await existingLike.destroy();
         }
       } else {
@@ -37,12 +37,12 @@ const likeUnlike = async (req, res) => {
           user_id: user_id,
           res_id: res_id,
           date_like: new Date(),
-          isLike: 1,
+          is_like: 1,
         });
       }
       return responseData(res, 200, "Processed successfully", existingLike);
     } catch (error) {
-      return responseData(res, 400, "Not Found");
+      return responseData(res, 400, "Not found user id or res id");
     }
   } catch (error) {
     return responseData(res, 500, "Error processing request");
@@ -69,7 +69,7 @@ const getLikeListByRes = async (req, res) => {
     const formattedLikes = likeList.map((like) => ({
       resId: like.res_id,
       dateLike: like.date_like,
-      isLiked: like.isLike,
+      isLiked: like.is_like,
       res: {
         resName: like.re.res_name,
         image: like.re.image,
@@ -89,28 +89,42 @@ const getLikeListByRes = async (req, res) => {
 };
 
 const getLikeListByUser = async (req, res) => {
-  const { userId } = req.params;
-  const content = await initModel.like_res.findAll({
-    attributes: ["user_id", "res_id", "date_like"],
-    include: [
-      {
-        model: initModel.users,
-        as: "user",
-        attributes: ["full_name", "email", "password"],
+  try {
+    const { userId } = req.params;
+    const existingLike = await initModel.like_res.findOne({
+      where:{
+        user_id: userId,
+      }
+    })
+    if (!existingLike) {
+      return responseData(res, 400, "Not found user id");
+    }
+    const likeList = await initModel.like_res.findAll({
+      include: ["user", "re"],
+      where: {
+        user_id: userId,
       },
-      {
-        model: initModel.restaurants,
-        as: "re",
-        attributes: ["res_name", "image", "description"],
+    });
+    const formattedLikes = likeList.map((like) => ({
+      userId: like.user_id,
+      dateLike: like.date_like,
+      isLiked: like.is_like,
+      user: {
+        fullName: like.user.full_name,
+        email: like.user.email,
+        password: like.user.password,
       },
-    ],
-    where: {
-      user_id: userId,
-    },
-    raw: true,
-  });
-
-  responseData(res, 200, "Processed successfully", { content });
+      res: {
+        resId: like.re.res_id,
+        resName: like.re.res_name,
+        image: like.re.image,
+        description: like.re.description,
+      },
+    }));
+    responseData(res, 200, "Processed successfully", formattedLikes);
+  } catch (error) {
+    return responseData(res, 500, "Error processing request");
+  }
 };
 
 export { likeUnlike, getLikeListByRes, getLikeListByUser };

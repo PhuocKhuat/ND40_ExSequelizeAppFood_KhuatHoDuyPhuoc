@@ -3,52 +3,86 @@ import sequelizeConnect from "../models/connect.js";
 import initModels from "../models/init-models.js";
 
 const initModel = initModels(sequelizeConnect);
+
+const addRateRes = async (req, res) => {
+  const { user_id, res_id, amount } = req.body;
+  const existingUserAndRes = await initModel.rate_res.findOne({
+    where: {
+      user_id: user_id,
+      res_id: res_id,
+    },
+  });
+  if (existingUserAndRes) {
+    if (amount > 5) {
+      return responseData(res, 400, "Invalid rating. Rating must be less than 5.");
+    }
+    await existingUserAndRes.destroy();
+    await initModel.rate_res.create({
+      user_id: user_id,
+      res_id: res_id,
+      amount: amount,
+      date_rate: new Date(),
+    });
+  } else {
+    if (amount > 5) {
+      return responseData(res, 400, "Invalid rating. Rating must be less than 5.");
+    }
+    await initModel.rate_res.create({
+      user_id: user_id,
+      res_id: res_id,
+      amount: amount,
+      date_rate: new Date(),
+    });
+  }
+  return responseData(res, 200, "Processed successfully", existingUserAndRes);
+};
+
 const getRateListByRes = async (req, res) => {
   const { resId } = req.params;
-try {
-  const existingRateRes = await initModel.rate_res.findOne({
-    attributes: ["res_id", "user_id", "amount", "date_rate"],
-    where: {
-      res_id: resId,
-    },
-    raw: true,
-  });
+  try {
+    const existingRateRes = await initModel.rate_res.findOne({
+      attributes: ["res_id", "user_id", "amount", "date_rate"],
+      where: {
+        res_id: resId,
+      },
+      raw: true,
+    });
 
-  if (!existingRateRes) {
-    return responseData(res, 400, "Invalid restaurant code");
+    if (!existingRateRes) {
+      return responseData(res, 400, "Invalid restaurant code");
+    }
+    const rateList = await initModel.rate_res.findAll({
+      attributes: ["res_id", "user_id", "amount", "date_rate"],
+      include: ["re", "user"],
+      where: {
+        res_id: resId,
+      },
+      raw: true,
+    });
+
+    const formattedRates = rateList.map((rate) => ({
+      resId: rate.res_id,
+      amount: rate.amount,
+      dateRate: rate.date_rate,
+      res: {
+        resName: rate["re.res_name"],
+        image: rate["re.image"],
+        description: rate["re.description"],
+      },
+      user: {
+        userId: rate["user.user_id"],
+        fullName: rate["user.full_name"],
+        email: rate["user.email"],
+        password: rate["user.password"],
+      },
+    }));
+    return responseData(res, 200, "Processed successfully", formattedRates);
+  } catch (error) {
+    // console.error("Error retrieving rate list by restaurant:", error);
+    return responseData(res, 500, "Error processing request");
   }
-  const rateList = await initModel.rate_res.findAll({
-    attributes: ["res_id", "user_id", "amount", "date_rate"],
-    include: ["re", "user"],
-    where: {
-      res_id: resId,
-    },
-    raw: true,
-  });
-
-  const formattedRates = rateList.map((rate) => ({
-    resId: rate.res_id,
-    amount: rate.amount,
-    dateRate: rate.date_rate,
-    res: {
-      resName: rate["re.res_name"],
-      image: rate["re.image"],
-      description: rate["re.description"],
-    },
-    user: {
-      userId: rate["user.user_id"],
-      fullName: rate["user.full_name"],
-      email: rate["user.email"],
-      password: rate["user.password"],
-    },
-  }));
-  return responseData(res, 200, "Processed successfully", formattedRates);
-} catch (error) {
-  // console.error("Error retrieving rate list by restaurant:", error);
-  return responseData(res, 500, "Error processing request");
-}
-
 };
+
 const getRateListByUser = async (req, res) => {
   const { userId } = req.params;
   try {
@@ -91,4 +125,4 @@ const getRateListByUser = async (req, res) => {
     return responseData(res, 500, "Error processing request");
   }
 };
-export { getRateListByRes, getRateListByUser };
+export { getRateListByRes, getRateListByUser, addRateRes };
