@@ -31,12 +31,26 @@ export default class orders extends Model {
     arr_sub_id: {
       type: DataTypes.STRING(250),
       allowNull: false
+    },
+    orders_id: {
+      autoIncrement: true,
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      primaryKey: true
     }
   }, {
     sequelize,
     tableName: 'orders',
     timestamps: false,
     indexes: [
+      {
+        name: "PRIMARY",
+        unique: true,
+        using: "BTREE",
+        fields: [
+          { name: "orders_id" },
+        ]
+      },
       {
         name: "user_id",
         using: "BTREE",

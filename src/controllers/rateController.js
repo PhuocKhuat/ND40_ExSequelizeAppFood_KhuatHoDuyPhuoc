@@ -5,11 +5,11 @@ import initModels from "../models/init-models.js";
 const initModel = initModels(sequelizeConnect);
 
 const addRateRes = async (req, res) => {
-  const { user_id, res_id, amount } = req.body;
+  const { userId, resId, amount } = req.body;
   const existingUserAndRes = await initModel.rate_res.findOne({
     where: {
-      user_id: user_id,
-      res_id: res_id,
+      user_id: userId,
+      res_id: resId,
     },
   });
   if (existingUserAndRes) {
@@ -18,9 +18,9 @@ const addRateRes = async (req, res) => {
     }
     await existingUserAndRes.destroy();
     await initModel.rate_res.create({
-      user_id: user_id,
-      res_id: res_id,
-      amount: amount,
+      user_id: userId,
+      res_id: resId,
+      amount,
       date_rate: new Date(),
     });
   } else {
@@ -28,9 +28,9 @@ const addRateRes = async (req, res) => {
       return responseData(res, 400, "Invalid rating. Rating must be less than 5.");
     }
     await initModel.rate_res.create({
-      user_id: user_id,
-      res_id: res_id,
-      amount: amount,
+      user_id: userId,
+      res_id: resId,
+      amount,
       date_rate: new Date(),
     });
   }

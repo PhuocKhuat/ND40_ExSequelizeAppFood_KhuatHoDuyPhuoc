@@ -6,11 +6,11 @@ const initModel = initModels(sequelizeConnect);
 const likeUnlike = async (req, res) => {
   try {
     try {
-      const { user_id, res_id } = req.body;
+      const { userId, resId } = req.body;
       const existingLike = await initModel.like_res.findOne({
         where: {
-          user_id: user_id,
-          res_id: res_id,
+          user_id: userId,
+          res_id: resId,
         },
         include: [
           {
@@ -34,8 +34,8 @@ const likeUnlike = async (req, res) => {
         }
       } else {
         await initModel.like_res.create({
-          user_id: user_id,
-          res_id: res_id,
+          user_id: userId,
+          res_id: resId,
           date_like: new Date(),
           is_like: 1,
         });
