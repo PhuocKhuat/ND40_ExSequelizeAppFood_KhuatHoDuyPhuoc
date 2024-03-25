@@ -1,4 +1,5 @@
-import convertToUserTime from "../configs/date.js";
+
+import { convertOldTime, convertToUserTime } from "../configs/date.js";
 import responseData from "../configs/response.js";
 import sequelizeConnect from "../models/connect.js";
 import initModels from "../models/init-models.js";
@@ -135,7 +136,7 @@ const getRateListByRes = async (req, res) => {
     const formattedRates = rateList.map((rate) => ({
       resId: rate.res_id,
       amount: rate.amount,
-      dateRate: rate.date_rate,
+      dateRate: convertOldTime(rate.date_rate),
       res: {
         resName: rate["re.res_name"],
         image: rate["re.image"],
@@ -159,7 +160,6 @@ const getRateListByUser = async (req, res) => {
   const { userId } = req.params;
   try {
     const existingRateRes = await initModel.rate_res.findOne({
-      attributes: ["user_id", "res_id", "amount", "date_rate"],
       where: {
         user_id: userId,
       },
@@ -169,7 +169,6 @@ const getRateListByUser = async (req, res) => {
       return responseData(res, 400, "Invalid user code");
     }
     const rateList = await initModel.rate_res.findAll({
-      attributes: ["user_id", "res_id", "amount", "date_rate"],
       where: {
         user_id: userId,
       },
@@ -179,7 +178,7 @@ const getRateListByUser = async (req, res) => {
     const formattedRates = rateList.map((rate) => ({
       userId: rate.user_id,
       amount: rate.amount,
-      dateRate: rate.date_rate,
+      dateRate: convertOldTime(rate.date_rate),
       user: {
         fullName: rate["user.full_name"],
         email: rate["user.email"],

@@ -8,4 +8,7 @@ dayjs.extend(timezone);
 const convertToUserTime = (userCountry) =>
   dayjs.tz(new Date(), userCountry).format("YYYY-MM-DD HH:mm:ss");
 
-export default convertToUserTime;
+const convertOldTime = (dateRate) =>
+  dayjs.tz(dateRate, "Asia/Ho_Chi_Minh").format("YYYY-MM-DD HH:mm:ss");
+
+export { convertToUserTime, convertOldTime };

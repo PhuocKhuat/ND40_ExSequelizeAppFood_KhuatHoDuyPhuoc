@@ -1,4 +1,4 @@
-import convertToUserTime from "../configs/date.js";
+import { convertToUserTime } from "../configs/date.js";
 import responseData from "../configs/response.js";
 import sequelizeConnect from "../models/connect.js";
 import initModels from "../models/init-models.js";
@@ -8,17 +8,9 @@ const likeUnlike = async (req, res) => {
   try {
     const { userId, resId, userCountry } = req.body;
 
-    const checkUser = await initModel.users.findOne({
-      where: {
-        user_id: userId,
-      },
-    });
+    const checkUser = await initModel.users.findByPk(userId);
 
-    const checkRes = await initModel.restaurants.findOne({
-      where: {
-        res_id: resId,
-      },
-    });
+    const checkRes = await initModel.restaurants.findByPk(resId);
 
     const existingLike = await initModel.like_res.findOne({
       where: {
@@ -70,12 +62,12 @@ const likeUnlike = async (req, res) => {
         date_like: isoDateLike,
         is_like: 1,
       });
-      const relationship = await initModel.like_res.findOne({
-        where: {
-          like_res_id: newLike.like_res_id,
-        },
-        include: ["user", "re"],
-      });
+      const relationship = await initModel.like_res.findByPk(
+        newLike.like_res_id,
+        {
+          include: ["user", "re"],
+        }
+      );
       formattedLikes = {
         likeId: relationship.like_res_id,
         isLiked: relationship.is_like,
