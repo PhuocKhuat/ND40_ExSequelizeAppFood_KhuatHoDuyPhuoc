@@ -1,3 +1,4 @@
+import convertToUserTime from "../configs/date.js";
 import responseData from "../configs/response.js";
 import sequelizeConnect from "../models/connect.js";
 import initModels from "../models/init-models.js";
@@ -5,7 +6,7 @@ import initModels from "../models/init-models.js";
 const initModel = initModels(sequelizeConnect);
 const likeUnlike = async (req, res) => {
   try {
-    const { userId, resId } = req.body;
+    const { userId, resId, userCountry } = req.body;
 
     const checkUser = await initModel.users.findOne({
       where: {
@@ -28,34 +29,36 @@ const likeUnlike = async (req, res) => {
     });
 
     if (!checkUser) {
-      return responseData(res, 404, "Not found user id");
+      return responseData(res, 404, "You are not logged in");
     }
+
     if (!checkRes) {
-      return responseData(res, 404, "Not found res id");
+      return responseData(res, 404, "The restaurant does not exist");
     }
 
     let formattedLikes = {};
 
+    const isoDateLike = convertToUserTime(userCountry);
+
     if (existingLike) {
       if (existingLike.is_like == 1) {
-        await existingLike.update({ date_like: new Date(), is_like: 0 });
+        await existingLike.update({ date_like: isoDateLike, is_like: 0 });
       } else {
-        await existingLike.update({ date_like: new Date(), is_like: 1 });
+        await existingLike.update({ date_like: isoDateLike, is_like: 1 });
         // await existingLike.destroy();
       }
       formattedLikes = {
-        likeResId: existingLike.like_res_id,
+        likeId: existingLike.like_res_id,
         isLiked: existingLike.is_like,
-        dateLike: existingLike.date_like,
+        dateLike: isoDateLike,
         user: {
-          userId: existingLike.user.user_id,
-          fullName: existingLike.user.full_name,
+          id: existingLike.user.user_id,
+          name: existingLike.user.full_name,
           email: existingLike.user.email,
-          password: existingLike.user.password,
         },
         res: {
-          resId: existingLike.re.user_id,
-          resName: existingLike.re.res_name,
+          id: existingLike.re.res_id,
+          name: existingLike.re.res_name,
           image: existingLike.re.image,
           description: existingLike.re.description,
         },
@@ -64,7 +67,7 @@ const likeUnlike = async (req, res) => {
       const newLike = await initModel.like_res.create({
         user_id: userId,
         res_id: resId,
-        date_like: new Date(),
+        date_like: isoDateLike,
         is_like: 1,
       });
       const relationship = await initModel.like_res.findOne({
@@ -74,25 +77,30 @@ const likeUnlike = async (req, res) => {
         include: ["user", "re"],
       });
       formattedLikes = {
-        likeResId: relationship.like_res_id,
+        likeId: relationship.like_res_id,
         isLiked: relationship.is_like,
-        dateLike: relationship.date_like,
+        dateLike: isoDateLike,
         user: {
-          userId: relationship.user.user_id,
-          fullName: relationship.user.full_name,
+          id: relationship.user.user_id,
+          name: relationship.user.full_name,
           email: relationship.user.email,
-          password: relationship.user.password,
         },
         res: {
-          resId: relationship.re.user_id,
-          resName: relationship.re.res_name,
+          id: relationship.re.user_id,
+          name: relationship.re.res_name,
           image: relationship.re.image,
           description: relationship.re.description,
         },
       };
     }
 
-    return responseData(res, 200, "Processed successfully", formattedLikes);
+    return responseData(
+      res,
+      200,
+      "Processed successfully",
+      formattedLikes,
+      userCountry
+    );
   } catch (error) {
     return responseData(res, 500, "Error processing request");
   }
@@ -107,7 +115,7 @@ const getLikeListByRes = async (req, res) => {
       },
     });
     if (!existingLike) {
-      return responseData(res, 400, "Not found res Id");
+      return responseData(res, 400, "The restaurant does not exist");
     }
     const likeList = await initModel.like_res.findAll({
       include: ["user", "re"],
@@ -146,7 +154,7 @@ const getLikeListByUser = async (req, res) => {
       },
     });
     if (!existingLike) {
-      return responseData(res, 400, "Not found user id");
+      return responseData(res, 400, "You are not logged in");
     }
     const likeList = await initModel.like_res.findAll({
       include: ["user", "re"],

@@ -1,3 +1,4 @@
+import convertToUserTime from "../configs/date.js";
 import responseData from "../configs/response.js";
 import sequelizeConnect from "../models/connect.js";
 import initModels from "../models/init-models.js";
@@ -5,43 +6,115 @@ import initModels from "../models/init-models.js";
 const initModel = initModels(sequelizeConnect);
 
 const addRateRes = async (req, res) => {
-  const { userId, resId, amount } = req.body;
-  const existingUserAndRes = await initModel.rate_res.findOne({
-    where: {
-      user_id: userId,
-      res_id: resId,
-    },
-  });
-  if (existingUserAndRes) {
-    if (amount > 5) {
-      return responseData(res, 400, "Invalid rating. Rating must be less than 5.");
-    }
-    await existingUserAndRes.destroy();
-    await initModel.rate_res.create({
-      user_id: userId,
-      res_id: resId,
-      amount,
-      date_rate: new Date(),
+  try {
+    const { userId, resId, amount, userCountry } = req.body;
+
+    const checkUser = await initModel.users.findByPk(userId);
+
+    const checkRes = await initModel.restaurants.findByPk(resId);
+
+    const exitstingRateRes = await initModel.rate_res.findOne({
+      where: {
+        user_id: userId,
+        res_id: resId,
+      },
+      include: ["user", "re"],
     });
-  } else {
-    if (amount > 5) {
-      return responseData(res, 400, "Invalid rating. Rating must be less than 5.");
+
+    let formattedRates = {};
+
+    const isoDateRate = convertToUserTime(userCountry);
+
+    if (!checkUser) {
+      return responseData(res, 404, "You are not logged in");
     }
-    await initModel.rate_res.create({
-      user_id: userId,
-      res_id: resId,
-      amount,
-      date_rate: new Date(),
-    });
+
+    if (!checkRes) {
+      return responseData(res, 404, "The restaurant does not exist");
+    }
+
+    if (exitstingRateRes) {
+      if (amount > 5) {
+        return responseData(
+          res,
+          400,
+          "Invalid rating. Rating must be less than 5."
+        );
+      }
+      await exitstingRateRes.update({ amount, date_rate: new Date() });
+
+      formattedRates = {
+        rateId: exitstingRateRes.rate_res_id,
+        amount: exitstingRateRes.amount,
+        dateRate: isoDateRate,
+        user: {
+          id: exitstingRateRes.user.user_id,
+          name: exitstingRateRes.user.full_name,
+          email: exitstingRateRes.user.email,
+        },
+        res: {
+          id: exitstingRateRes.re.res_id,
+          name: exitstingRateRes.re.res_name,
+          image: exitstingRateRes.re.image,
+          description: exitstingRateRes.re.description,
+        },
+      };
+    } else {
+      if (amount > 5) {
+        return responseData(
+          res,
+          400,
+          "Invalid rating. Rating must be less than 5."
+        );
+      }
+      const newRate = await initModel.rate_res.create({
+        user_id: userId,
+        res_id: resId,
+        amount,
+        date_rate: isoDateRate,
+      });
+
+      const relationship = await initModel.rate_res.findByPk(
+        newRate.rate_res_id,
+        {
+          include: ["user", "re"],
+        }
+      );
+
+      formattedRates = {
+        rateId: relationship.rate_res_id,
+        amount: relationship.amount,
+        dateRate: isoDateRate,
+        user: {
+          id: relationship.user.user_id,
+          name: relationship.user.full_name,
+          email: relationship.user.email,
+        },
+        res: {
+          id: relationship.re.user_id,
+          name: relationship.re.res_name,
+          image: relationship.re.image,
+          description: relationship.re.description,
+        },
+      };
+    }
+
+    return responseData(
+      res,
+      200,
+      "Processed successfully",
+      formattedRates,
+      userCountry
+    );
+  } catch (error) {
+    return responseData(res, 500, "Error processing request");
   }
-  return responseData(res, 200, "Processed successfully", existingUserAndRes);
 };
 
 const getRateListByRes = async (req, res) => {
   const { resId } = req.params;
   try {
     const existingRateRes = await initModel.rate_res.findOne({
-      attributes: ["res_id", "user_id", "amount", "date_rate"],
       where: {
         res_id: resId,
       },
@@ -52,7 +125,6 @@ const getRateListByRes = async (req, res) => {
       return responseData(res, 400, "Invalid restaurant code");
     }
     const rateList = await initModel.rate_res.findAll({
-      attributes: ["res_id", "user_id", "amount", "date_rate"],
       include: ["re", "user"],
       where: {
         res_id: resId,
