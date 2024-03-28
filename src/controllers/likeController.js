@@ -1,9 +1,10 @@
-import { convertToUserTime } from "../configs/date.js";
+import { convertOldTime, convertToUserTime } from "../configs/date.js";
 import responseData from "../configs/response.js";
 import sequelizeConnect from "../models/connect.js";
 import initModels from "../models/init-models.js";
 
 const initModel = initModels(sequelizeConnect);
+
 const likeUnlike = async (req, res) => {
   try {
     const { userId, resId, userCountry } = req.body;
@@ -101,12 +102,8 @@ const likeUnlike = async (req, res) => {
 const getLikeListByRes = async (req, res) => {
   try {
     const { resId } = req.params;
-    const existingLike = await initModel.like_res.findOne({
-      where: {
-        res_id: resId,
-      },
-    });
-    if (!existingLike) {
+    const existingRes = await initModel.restaurants.findByPk(resId);
+    if (!existingRes) {
       return responseData(res, 400, "The restaurant does not exist");
     }
     const likeList = await initModel.like_res.findAll({
@@ -117,7 +114,7 @@ const getLikeListByRes = async (req, res) => {
     });
     const formattedLikes = likeList.map((like) => ({
       resId: like.res_id,
-      dateLike: like.date_like,
+      dateLike: convertOldTime(like.date_like),
       isLiked: like.is_like,
       res: {
         resName: like.re.res_name,
@@ -140,12 +137,10 @@ const getLikeListByRes = async (req, res) => {
 const getLikeListByUser = async (req, res) => {
   try {
     const { userId } = req.params;
-    const existingLike = await initModel.like_res.findOne({
-      where: {
-        user_id: userId,
-      },
-    });
-    if (!existingLike) {
+
+    const existingUser = await initModel.users.findByPk(userId);
+
+    if (!existingUser) {
       return responseData(res, 400, "You are not logged in");
     }
     const likeList = await initModel.like_res.findAll({
@@ -154,9 +149,10 @@ const getLikeListByUser = async (req, res) => {
         user_id: userId,
       },
     });
+
     const formattedLikes = likeList.map((like) => ({
       userId: like.user_id,
-      dateLike: like.date_like,
+      dateLike: convertOldTime(like.date_like),
       isLiked: like.is_like,
       user: {
         fullName: like.user.full_name,
@@ -170,6 +166,7 @@ const getLikeListByUser = async (req, res) => {
         description: like.re.description,
       },
     }));
+
     responseData(res, 200, "Processed successfully", formattedLikes);
   } catch (error) {
     return responseData(res, 500, "Error processing request");

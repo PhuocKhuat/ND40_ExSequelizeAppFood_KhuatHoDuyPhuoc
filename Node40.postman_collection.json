@@ -1,0 +1,828 @@
+{
+	"info": {
+		"_postman_id": "33917e58-501c-4391-a9cd-bfe4bc296846",
+		"name": "Node40",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "32039120"
+	},
+	"item": [
+		{
+			"name": "Sequelize App Food",
+			"item": [
+				{
+					"name": "get-like-res",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{domain}}/like/get-like-list",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"like",
+								"get-like-list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get-dis-like-list",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{domain}}/like/get-dis-like-list",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"like",
+								"get-dis-like-list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get-like-list-by-res",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{domain}}/like/get-like-list-by-res/10",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"like",
+								"get-like-list-by-res",
+								"10"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get-like-list-by-user",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{domain}}/like/get-like-list-by-user/5",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"like",
+								"get-like-list-by-user",
+								"5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get-rate-list-by-res",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{domain}}/rate/get-rate-list-by-res/3",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"rate",
+								"get-rate-list-by-res",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get-rate-list-by-user",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{domain}}/rate/get-rate-list-by-user/1",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"rate",
+								"get-rate-list-by-user",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "like-unlike",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userId\": 15,\r\n    \"resId\": 4,\r\n    \"userCountry\": \"Asia/Ho_Chi_Minh\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/like/like-unlike",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"like",
+								"like-unlike"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add-rate-res",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userId\": 2,\r\n    \"resId\": 5,\r\n    \"amount\": 4,\r\n    \"userCountry\": \"Asia/Ho_Chi_Minh\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/rate/add-rate-res",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"rate",
+								"add-rate-res"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add-orders",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userId\": 3,\r\n    \"foodId\": 10,\r\n    \"amount\": 4,\r\n    \"code\": \"BCC58\",\r\n    \"arrSubId\": \"BKM485\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/orders/add-orders",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"orders",
+								"add-orders"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Youtube App",
+			"item": [
+				{
+					"name": "get-video",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjM0LCJpYXQiOjE3MTEwODE5NDEsImV4cCI6MTc0MjYzOTU0MX0.GuXyM3BNVRhgab_1JQstLWtLbejXfpzCju-CZwfp8bk",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/video/get-video",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"video",
+								"get-video"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get-video-type",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjM0LCJpYXQiOjE3MTEwODE5NDEsImV4cCI6MTc0MjYzOTU0MX0.GuXyM3BNVRhgab_1JQstLWtLbejXfpzCju-CZwfp8bk",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/video/get-video-type",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"video",
+								"get-video-type"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get-video-by-type",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/video/get-video-by-type/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"video",
+								"get-video-by-type",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get-video-id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/video/get-video-by-id/4",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"video",
+								"get-video-by-id",
+								"4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get-video-page",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/video/get-video-page/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"video",
+								"get-video-page",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "signup",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"fullName\": \"abc\",\r\n    \"email\": \"test25@gmail.com\",\r\n    \"password\": \"123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{domain}}/user/signup",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"user",
+								"signup"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"mono@gmail.com\",\r\n    \"password\": \"1234\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{domain}}/user/login",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"user",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "loginFaceBook",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"abc\",\r\n    \"email\": \"a@gmail.com\",\r\n    \"faceAppId\": 1575153353295927\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/user/login-facebook",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								"login-facebook"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get-video-comment",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjM0LCJpYXQiOjE3MTEwODE5NDEsImV4cCI6MTc0MjYzOTU0MX0.GuXyM3BNVRhgab_1JQstLWtLbejXfpzCju-CZwfp8bk",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{domain}}/get-video-comment/9",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"get-video-comment",
+								"9"
+							],
+							"query": [
+								{
+									"key": null,
+									"value": "",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "reset-token",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjM0LCJpYXQiOjE3MTEwODE5NDEsImV4cCI6MTc0MjYzOTU0MX0.GuXyM3BNVRhgab_1JQstLWtLbejXfpzCju-CZwfp8bk",
+								"type": "text"
+							},
+							{
+								"key": "",
+								"value": "",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{domain}}/user/refresh-token",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"user",
+								"refresh-token"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "check-email",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "tokenCode",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjgsImtleSI6MTcxMTI2NzkwMDMzOSwiaWF0IjoxNzExMjY3OTAwLCJleHAiOjE3NDI4MjU1MDB9.CLAoZuin9E6BcU5FNKe1mDIYN4EcbWWzHr2Nn-wwGUU",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"khuathoduyphuoc010201@gmail.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{domain}}/user/check-email",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"user",
+								"check-email"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "check-code",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "tokenCode",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb2RlIjoiNzQ2MiIsImlhdCI6MTcxMTUzNDE2NywiZXhwIjoxNzQzMDkxNzY3fQ.S8oYDsKtZCvmoQAiBIWy0AeZb9JX7_ToiRi_4m33jQo",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"code\": \"8720\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{domain}}/user/check-code",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"user",
+								"check-code"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "change-pass",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjgsImtleSI6MTcxMTI2NzkwMDMzOSwiaWF0IjoxNzExMjY3OTAwLCJleHAiOjE3NDI4MjU1MDB9.CLAoZuin9E6BcU5FNKe1mDIYN4EcbWWzHr2Nn-wwGUU",
+								"type": "text"
+							},
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"khuathoduyphuoc010201@gmail.com\",\r\n    \"password\": \"123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{domain}}/user/change-pass",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"user",
+								"change-pass"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "search-video",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"videoName\": \"gam\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{domain}}/video/search-video",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"video",
+								"search-video"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Model Student",
+			"item": [
+				{
+					"name": "Test query params url",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"abc@gmail.com\",\r\n    \"phone\": \"09090909090\",\r\n    \"sex\": \"boy\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/getVideoList",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"getVideoList"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getStudentList",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/getStudentList",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"getStudentList"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getDetailInfo",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/getDetailInfo/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"getDetailInfo",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "addStudent",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"abcde\",\r\n    \"age\": 14,\r\n    \"numberClass\": 8\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/addStudent",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"addStudent"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateStudent",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"abcdefghkl\",\r\n    \"age\": 14,\r\n    \"numberClass\": 8\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/updateStudent/0.15086782534789234",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"updateStudent",
+								"0.15086782534789234"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteStudent",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/deleteStudent/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"deleteStudent",
+								"2"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "domain",
+			"value": "http://localhost:8080",
+			"type": "string"
+		}
+	]
+}

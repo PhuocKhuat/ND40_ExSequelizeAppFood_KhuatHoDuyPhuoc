@@ -115,16 +115,12 @@ const addRateRes = async (req, res) => {
 const getRateListByRes = async (req, res) => {
   const { resId } = req.params;
   try {
-    const existingRateRes = await initModel.rate_res.findOne({
-      where: {
-        res_id: resId,
-      },
-      raw: true,
-    });
+    const existingRes = await initModel.restaurants.findByPk(resId);
 
-    if (!existingRateRes) {
+    if (!existingRes) {
       return responseData(res, 400, "Invalid restaurant code");
     }
+    
     const rateList = await initModel.rate_res.findAll({
       include: ["re", "user"],
       where: {
@@ -159,15 +155,12 @@ const getRateListByRes = async (req, res) => {
 const getRateListByUser = async (req, res) => {
   const { userId } = req.params;
   try {
-    const existingRateRes = await initModel.rate_res.findOne({
-      where: {
-        user_id: userId,
-      },
-      raw: true,
-    });
-    if (!existingRateRes) {
+    const existingUser = await initModel.users.findByPk(userId);
+
+    if (!existingUser) {
       return responseData(res, 400, "Invalid user code");
     }
+
     const rateList = await initModel.rate_res.findAll({
       where: {
         user_id: userId,
@@ -175,6 +168,7 @@ const getRateListByUser = async (req, res) => {
       include: ["re", "user"],
       raw: true,
     });
+
     const formattedRates = rateList.map((rate) => ({
       userId: rate.user_id,
       amount: rate.amount,
@@ -191,9 +185,11 @@ const getRateListByUser = async (req, res) => {
         description: rate["re.description"],
       },
     }));
+
     return responseData(res, 200, "Processed successfully", formattedRates);
   } catch (error) {
     return responseData(res, 500, "Error processing request");
   }
 };
+
 export { getRateListByRes, getRateListByUser, addRateRes };
